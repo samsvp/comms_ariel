@@ -1,4 +1,4 @@
-PROJECT(rpc)
+PROJECT(rpc_server)
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
 # Protobuf
@@ -8,11 +8,11 @@ SET(LINK_FLAGS "-L/usr/local/lib -lprotobuf -pthread -lpthread")
 
 include(FindProtobuf)
 #ADD_SUBDIRECTORY(proto)
-add_library(proto proto/comms_ariel.pb.cc)
+add_library(proto_server proto/comms_ariel.pb.cc)
 # Boost
 find_package(Boost 1.55.0 REQUIRED COMPONENTS system filesystem)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${Boost_INCLUDE_DIRS})
-ADD_EXECUTABLE(main main.cpp)
+ADD_EXECUTABLE(main_server main.cpp)
 link_directories(${Boost_LIBRARY_DIRS})
-TARGET_LINK_LIBRARIES(main proto ${PROTOBUF_LIBRARY} ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES(main_server proto_server ${PROTOBUF_LIBRARY} ${Boost_LIBRARIES})

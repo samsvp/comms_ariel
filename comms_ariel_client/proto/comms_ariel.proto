@@ -1,0 +1,65 @@
+syntax = 'proto3';
+
+package comms_ariel;
+
+message CommonTelemetry {
+    uint64 time_us = 1;
+    uint32 id = 2;
+}
+
+message USVTelemetry {
+    double latitude = 2;
+    double longitude = 3;
+
+    repeated double orientation = 4;
+
+    float velocity_n = 5;
+    float velocity_w = 6;
+
+    enum States {
+        TRANSIT = 0;
+        TAKEOFF_OK = 1;
+        LANDING_OK = 2;
+    }
+    States state = 8;
+}
+
+message DroneTelemetry {
+    /** ID of the mission currently loaded in the drone */
+    uint64 loaded_mission_id = 1;
+
+    double latitude = 2;
+    double longitude = 3;
+    float altitude = 4;
+
+    enum States {
+        WAITING_LANDING = 0;
+    }
+    States state = 8;
+}
+
+message Mission {
+    /** Mission, used for reference in the telemetry message */
+    uint64 mission_id = 1;
+    /** (lat, lon, alt) waypoints */
+    repeated double waypoints = 2;
+    /** Time (in us) reference for the USV waypoints */
+    uint64 usv_reference_time = 3;
+    /** (lat, lon, time) waypoints of the USV. Time is relative
+     * to usv_reference_time */
+    repeated double usv_waypoints = 4;
+}
+
+message USVToDroneMessage {
+    CommonTelemetry common = 1;
+
+    USVTelemetry telemetry = 2;
+    Mission mission = 3;
+}
+
+message DroneToUSVMessage {
+    CommonTelemetry common = 1;
+
+    DroneTelemetry telemetry = 2;
+}
+
