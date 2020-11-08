@@ -49,6 +49,7 @@ void send_message(comms_ariel::DroneToUSVMessage msg)
   void *buffer = malloc(s.size());
   msg.SerializeToArray(buffer, s.size());
   send(fd, buffer, s.size(), 0);
+  free(buffer);
 
   close(fd);
   cout << "Message sent" << endl;
