@@ -26,7 +26,7 @@ To test if everything is ok, initialize the server:
 
     $ build/comms_ariel_server/main_server
     
-In the client, in the "main()" function write the IP of the server and run:
+Then initialize the server:
 
     $ build/comms_ariel_client/main_client
     
