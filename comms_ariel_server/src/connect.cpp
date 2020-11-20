@@ -1,16 +1,3 @@
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include <string>
-#include "../proto/comms_ariel.pb.h"
 #include "../include/connect.hpp"
 
 
@@ -73,39 +60,4 @@ void receive_message(char* buf, int listenfd)
   std::cout << "You got a message from " << inet_ntoa(client.sin_addr) << std::endl;
 
   close(connectfd);  
-}
-
-void receive_drone_message(int port, void (*callback)(comms_ariel::DroneToUSVMessage&))
-{
-  int listenfd;
-  connect(listenfd, port);
-  char buf[MAXDATASIZE];
-
-  while(1) // main accept() loop
-  {
-    receive_message(buf, listenfd);
-    // Receive  msg from clients
-    comms_ariel::DroneToUSVMessage m;
-    m.ParsePartialFromArray(buf, sizeof(buf) / sizeof(char));
-    callback(m);
-  }
-
-  close(listenfd);
-}
-
-void receive_usv_message(int port, void (*callback)(comms_ariel::USVToDroneMessage&))
-{
-  int listenfd;
-  connect(listenfd, port);
-  char buf[MAXDATASIZE];
-
-  while (1) {     // main accept() loop
-    receive_message(buf, listenfd);
-
-    comms_ariel::USVToDroneMessage m;
-    m.ParsePartialFromArray(buf, sizeof(buf) / sizeof(char));
-    callback(m);
-  }
-
-  close(listenfd);
 }
