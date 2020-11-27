@@ -6,14 +6,9 @@ Ariel's USV and Drone communication package.
 Dependencies
 ======================
 
-Download Protobuf from https://github.com/protocolbuffers/protobuf/releases, and extract the file. Then go to the Protobuf directory you just extracted and run:
+Install Protobuf 3.0:
 
-
-    $ ./configure
-    $ make
-    $ make check
-    $ sudo make install
-    $ sudo ldconfig
+    $ sudo apt install protobuf-compiler
 
 Install
 ======================
