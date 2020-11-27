@@ -3,6 +3,10 @@
 
 
 const double _rad2deg = 57.2957795131; // 180/pi
+/// 3D Rotation (x, y, z)
+/// 0 -1  0
+/// 1  0  0
+/// 0  0  1
 const tf2::Quaternion _NWU2ENU = {0, 0, 0.7071068, 0.7071068};
 
 /// Converts an angle from radians to degrees.
