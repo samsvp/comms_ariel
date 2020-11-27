@@ -1,12 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include "../proto/comms_ariel.pb.h"
-#include "../include/connect.hpp"
 #include "ros/ros.h"
 #include "geometry_msgs/PointStamped.h"
 #include "geometry_msgs/Vector3Stamped.h"
 #include "geometry_msgs/QuaternionStamped.h"
+#include <tf2/LinearMath/Quaternion.h>
+#include "../proto/comms_ariel.pb.h"
+#include "../include/connect.hpp"
+#include "../include/converter.hpp"
 
 
 ros::Publisher position_pub;
@@ -35,8 +37,8 @@ void usv_callback(comms_ariel::USVToDroneMessage& m)
   ros::Time time_now = ros::Time::now();
   // Position
   geometry_msgs::PointStamped point;
-  point.point.x = m.telemetry().longitude();
-  point.point.y = m.telemetry().latitude();
+  point.point.x = rad2deg(m.telemetry().longitude());
+  point.point.y = rad2deg(m.telemetry().latitude());
   point.point.z = 0;
   point.header.stamp = time_now;
   position_pub.publish(point);
@@ -51,14 +53,17 @@ void usv_callback(comms_ariel::USVToDroneMessage& m)
 
   // Orientation
   geometry_msgs::QuaternionStamped quaternion;
-  std::vector<double> p_data;
+  std::vector<double> v_nwu_data;
   std::copy(m.telemetry().orientation().begin(), m.telemetry().orientation().end(),
-            std::back_inserter(p_data));
+            std::back_inserter(v_nwu_data));
+  tf2::Quaternion nwu_data = { v_nwu_data[0], v_nwu_data[1],
+                               v_nwu_data[2], v_nwu_data[3] };
+  tf2::Quaternion enu_data = nwu2enu(nwu_data);
 
-  quaternion.quaternion.x = p_data[0];
-  quaternion.quaternion.y = p_data[1];
-  quaternion.quaternion.z = p_data[2];
-  quaternion.quaternion.w = p_data[3];
+  quaternion.quaternion.x = enu_data[0];
+  quaternion.quaternion.y = enu_data[1];
+  quaternion.quaternion.z = enu_data[2];
+  quaternion.quaternion.w = enu_data[3];
   quaternion.header.stamp = time_now;
   orientation_pub.publish(quaternion);
 }

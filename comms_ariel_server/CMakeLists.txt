@@ -10,6 +10,7 @@ include(FindProtobuf)
 #ADD_SUBDIRECTORY(proto)
 add_library(proto_server proto/comms_ariel.pb.cc)
 add_library(connect_server src/connect.cpp)
+add_library(converter_server src/converter.cpp)
 
 find_package(catkin REQUIRED COMPONENTS 
     roscpp
@@ -27,5 +28,5 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${Boost_INCLUDE_DIRS} ${catkin_I
 ADD_EXECUTABLE(main_server src/main.cpp)
 link_directories(${Boost_LIBRARY_DIRS})
 TARGET_LINK_LIBRARIES(connect_server proto_server ${PROTOBUF_LIBRARY} ${Boost_LIBRARIES})
-TARGET_LINK_LIBRARIES(main_server proto_server connect_server 
+TARGET_LINK_LIBRARIES(main_server proto_server connect_server converter_server
                         ${PROTOBUF_LIBRARY} ${Boost_LIBRARIES} ${catkin_LIBRARIES})

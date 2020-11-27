@@ -57,7 +57,7 @@ void send_usv_mock()
     cout << "Filling message" << endl;
     comms_ariel::USVToDroneMessage m;
     double r = ((double) rand() / (RAND_MAX));
-    fill_usv_data(m.mutable_telemetry(), 22.0 * r, 42.0  * r, {0.0, 0.0, 0.0, 1.0},
+    fill_usv_data(m.mutable_telemetry(), 3.14 / 2 * r, 3.14  * r, {0.0, 0.0, 0.0, 1.0},
                   20.0f * r, 15.0f * r, comms_ariel::USVTelemetry_States_LANDING_OK);
     fill_mission_data(m.mutable_mission(), 0, {1.0, 0.0, 2.0, 3.0},
                       m_time, {1.0, 0.0, 2.0, 3.0});
